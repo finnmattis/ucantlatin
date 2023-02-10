@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Header() {
     return (
-        <header className="sticky h-[10vh] w-full flex justify-between items-center bg-primary">
+        <header className="sticky h-[10vh] w-full flex justify-between items-center bg-primary border-b-2 border-gray-500">
             <Link
                 href="/terms"
                 className="group h-full mx-10 flex flex-col overflow-hidden"

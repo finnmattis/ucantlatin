@@ -1,9 +1,13 @@
-import type { AppProps } from "next/app"
+//FA Next.js config
+import { config } from "@fortawesome/fontawesome-svg-core"
+import "@fortawesome/fontawesome-svg-core/styles.css"
+config.autoAddCss = false
+
 import Head from "next/head"
 import Header from "../../components/header"
 import "../styles/globals.css"
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }) {
     return (
         <div>
             <Head>
