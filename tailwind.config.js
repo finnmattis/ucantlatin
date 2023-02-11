@@ -15,6 +15,7 @@ module.exports = {
                 secondary: "#303854",
                 highlight: "#AAB1F9",
                 text: "#F9F7FB",
+                button: "#4600F6"
             },
         },
     },
