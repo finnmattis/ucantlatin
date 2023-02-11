@@ -4,38 +4,60 @@ import {
     faQuestion,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { collection, getDocs, query } from "firebase/firestore"
 import React, { useEffect, useRef, useState } from "react"
+import { firestore } from "../../lib/firebase"
 
-export default function terms() {
+export async function getServerSideProps() {
+    const wordsQuery = query(collection(firestore, "set1"))
+    const sets = (await getDocs(wordsQuery)).docs.map((doc) => doc.data())
+    return {
+        props: {
+            sets: sets,
+        },
+    }
+}
+
+export default function terms({ sets }) {
+    let length = 2
+    let [currentCard, setCurrentCard] = useState(sets[0])
     let [direction, setDirection] = useState("")
     let [CurCardNum, setCurCardNum] = useState(1)
-    let [currentCard, setCurrentCard] = useState(0)
+    let [cardIndex, setCardIndex] = useState(0)
     let [progress, setProgress] = useState(0)
-
-    //temp
-    let length = 10
 
     let clickHandler = (direction) => {
         //Won't take effect until the next render
         setDirection(direction)
         setCurCardNum(CurCardNum < 2 ? CurCardNum + 1 : 1)
 
-        let new_card = 0
+        let newIndex = 0
         if (direction == "right") {
-            new_card = currentCard < length ? currentCard + 1 : 0
+            newIndex = (cardIndex + 1) % length
         } else {
-            new_card = currentCard > 1 ? currentCard - 1 : length
+            newIndex = cardIndex - 1 < 0 ? length - 1 : 0
         }
-        let percent = (new_card / length) * 100
+        let percent = (newIndex / length) * 100
         setProgress(percent === Infinity ? 0 : percent)
-        setCurrentCard(new_card)
+        setCardIndex(newIndex)
+        setCurrentCard(sets[newIndex])
     }
 
     return (
         <div className="flex h-[90vh] flex-col items-center bg-primary">
             <ProgressBar progress={progress} />
-            <Card cardNum={2} CurCardNum={CurCardNum} direction={direction} />
-            <Card cardNum={1} CurCardNum={CurCardNum} direction={direction} />
+            <Card
+                cardNum={2}
+                CurCardNum={CurCardNum}
+                direction={direction}
+                card={currentCard}
+            />
+            <Card
+                cardNum={1}
+                CurCardNum={CurCardNum}
+                direction={direction}
+                card={currentCard}
+            />
             <div className="mt-[78vh] flex w-[30vw] min-w-[400px] justify-around">
                 <button
                     onClick={() => clickHandler("left")}
@@ -65,8 +87,9 @@ function ProgressBar({ progress }) {
     )
 }
 
-function Card({ cardNum, CurCardNum: curCardNum, direction }) {
-    let [status, setStatus] = useState("active")
+function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
+    let [status, setStatus] = useState("")
+    let [word, setWord] = useState("")
     let partOfSpeech = useRef("")
     let family = useRef("")
     let gender = useRef("")
@@ -75,6 +98,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction }) {
 
     useEffect(() => {
         if (curCardNum == cardNum) {
+            setWord(card.word)
             if (direction == "right") {
                 setStatus("fromRight")
                 setTimeout(() => {
@@ -99,14 +123,14 @@ function Card({ cardNum, CurCardNum: curCardNum, direction }) {
         <div
             data-status={status}
             className="absolute mt-10 flex h-[70vh] w-[30vw] min-w-[400px] flex-col items-center rounded bg-secondary 
-            drop-shadow-2xl duration-500
+            drop-shadow-2xl duration-1000
             ease-[cubic-bezier(.05,.43,.25,.95)] data-[status=after]:translate-x-1/2
             data-[status=before]:-translate-x-1/2 data-[status=fromRight]:-translate-x-1/2 data-[status=fromLeft]:translate-x-1/2
             data-[status=after]:scale-0 data-[status=before]:scale-0 data-[status=fromRight]:scale-0
             data-[status=fromLeft]:scale-0 data-[status=fromRight]:transition-none data-[status=fromLeft]:transition-none
             "
         >
-            <p className="mt-5 text-5xl text-text">amo</p>
+            <p className="mt-5 text-5xl text-text">{word}</p>
             <div className="mt-10 flex w-full justify-evenly">
                 <select
                     ref={partOfSpeech}
@@ -156,7 +180,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction }) {
                     SUMBIT
                 </button>
             </div>
-            <button className=" absolute bottom-0 right-0 m-1 flex h-16 w-16 items-center justify-center rounded-full border-4 border-primary bg-black/0 text-5xl text-primary">
+            <button className=" absolute bottom-0 right-0 m-1 flex h-12 w-12 items-center justify-center rounded-full border-4 border-primary bg-black/0 text-4xl text-primary">
                 <FontAwesomeIcon icon={faQuestion} />
             </button>
         </div>
