@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }) {
     return (
         <div>
             <Head>
-                <title>Ucant Latin</title>
+                <title>U Cant Latin</title>
                 <meta name="description" content="The Best Site" />
                 <meta
                     name="viewport"

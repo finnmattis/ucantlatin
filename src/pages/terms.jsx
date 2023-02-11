@@ -1,11 +1,13 @@
 import {
     faArrowLeft,
     faArrowRight,
-    faQuestion,
+    faCompass,
+    faPen,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { collection, getDocs, query } from "firebase/firestore"
-import React, { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import React, { useEffect, useState } from "react"
 import { firestore } from "../../lib/firebase"
 
 export async function getServerSideProps() {
@@ -19,7 +21,6 @@ export async function getServerSideProps() {
 }
 
 export default function terms({ sets }) {
-    let length = 2
     let [currentCard, setCurrentCard] = useState(sets[0])
     let [direction, setDirection] = useState("")
     let [CurCardNum, setCurCardNum] = useState(1)
@@ -33,11 +34,11 @@ export default function terms({ sets }) {
 
         let newIndex = 0
         if (direction == "right") {
-            newIndex = (cardIndex + 1) % length
+            newIndex = (cardIndex + 1) % sets.length
         } else {
-            newIndex = cardIndex - 1 < 0 ? length - 1 : 0
+            newIndex = cardIndex - 1 < 0 ? sets.length - 1 : 0
         }
-        let percent = (newIndex / length) * 100
+        let percent = (newIndex / sets.length) * 100
         setProgress(percent === Infinity ? 0 : percent)
         setCardIndex(newIndex)
         setCurrentCard(sets[newIndex])
@@ -45,6 +46,16 @@ export default function terms({ sets }) {
 
     return (
         <div className="flex h-[90vh] flex-col items-center bg-primary">
+            <Link href="terms/browse">
+                <button className="absolute left-0 top-[10vh] m-2 h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105">
+                    <FontAwesomeIcon icon={faCompass} />
+                </button>
+            </Link>
+            <Link href="terms/create">
+                <button className="absolute right-0 top-[10vh] m-2 h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105">
+                    <FontAwesomeIcon icon={faPen} />
+                </button>
+            </Link>
             <ProgressBar progress={progress} />
             <Card
                 cardNum={2}
@@ -61,13 +72,13 @@ export default function terms({ sets }) {
             <div className="mt-[78vh] flex w-[30vw] min-w-[400px] justify-around">
                 <button
                     onClick={() => clickHandler("left")}
-                    className="h-20 w-20 rounded-full border-2 border-text text-3xl text-text"
+                    className="h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105"
                 >
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </button>
                 <button
                     onClick={() => clickHandler("right")}
-                    className="h-20 w-20 rounded-full border-2 border-text text-3xl text-text"
+                    className="h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105"
                 >
                     <FontAwesomeIcon icon={faArrowRight} />
                 </button>
@@ -90,11 +101,6 @@ function ProgressBar({ progress }) {
 function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
     let [status, setStatus] = useState("")
     let [word, setWord] = useState("")
-    let partOfSpeech = useRef("")
-    let family = useRef("")
-    let gender = useRef("")
-    let cognate = useRef("")
-    let definition = useRef("")
 
     useEffect(() => {
         if (curCardNum == cardNum) {
@@ -122,67 +128,13 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
     return (
         <div
             data-status={status}
-            className="absolute mt-10 flex h-[70vh] w-[30vw] min-w-[400px] flex-col items-center rounded bg-secondary 
-            drop-shadow-2xl duration-1000
-            ease-[cubic-bezier(.05,.43,.25,.95)] data-[status=after]:translate-x-1/2
-            data-[status=before]:-translate-x-1/2 data-[status=fromRight]:-translate-x-1/2 data-[status=fromLeft]:translate-x-1/2
-            data-[status=after]:scale-0 data-[status=before]:scale-0 data-[status=fromRight]:scale-0
+            className=" absolute mt-10 flex h-[70vh] w-[30vw] min-w-[400px] items-center justify-center rounded bg-secondary 
+            drop-shadow-2xl duration-700 ease-[cubic-bezier(.05,.43,.25,.95)] data-[status=after]:translate-x-1/2 data-[status=before]:-translate-x-1/2 data-[status=fromRight]:-translate-x-1/2 data-[status=fromLeft]:translate-x-1/2 data-[status=before]:-rotate-6 data-[status=fromLeft]:rotate-6 data-[status=after]:rotate-6
+            data-[status=fromRight]:-rotate-6 data-[status=after]:scale-0 data-[status=before]:scale-0 data-[status=fromRight]:scale-0
             data-[status=fromLeft]:scale-0 data-[status=fromRight]:transition-none data-[status=fromLeft]:transition-none
             "
         >
             <p className="mt-5 text-5xl text-text">{word}</p>
-            <div className="mt-10 flex w-full justify-evenly">
-                <select
-                    ref={partOfSpeech}
-                    className=" aspect-[10/3] w-[30%]  cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
-                >
-                    <option value="n">Noun</option>
-                    <option value="v">Verb</option>
-                    <option value="adj">Adjective</option>
-                    <option value="adv">Adverb</option>
-                    <option value="conj">Conjunction</option>
-                </select>
-                <select
-                    ref={family}
-                    className="aspect-[10/3] w-[30%] cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
-                >
-                    <option value="1">Family 1</option>
-                    <option value="2">Family 2</option>
-                    <option value="3">Family 3</option>
-                    <option value="4">Family 4</option>
-                    <option value="5">Family 5</option>
-                </select>
-                <select
-                    ref={gender}
-                    className="aspect-[10/3] w-[30%] cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
-                >
-                    <option value="">N/A</option>
-                    <option value="m">Masculine</option>
-                    <option value="f">Feminine</option>
-                    <option value="n">Neuter</option>
-                </select>
-            </div>
-            <input
-                ref={cognate}
-                className="mt-20 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
-                type="text"
-                placeholder="Cognate"
-            />
-            <input
-                ref={definition}
-                className="mt-20 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
-                type="text"
-                placeholder="Definition"
-            />
-            <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
-                <div className="animate-tilt absolute -inset-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                <button className="relative h-full w-full rounded bg-primary text-lg text-text ">
-                    SUMBIT
-                </button>
-            </div>
-            <button className=" absolute bottom-0 right-0 m-1 flex h-12 w-12 items-center justify-center rounded-full border-4 border-primary bg-black/0 text-4xl text-primary">
-                <FontAwesomeIcon icon={faQuestion} />
-            </button>
         </div>
     )
 }
