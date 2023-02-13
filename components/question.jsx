@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useRef } from "react"
+import { useRef } from "react"
 
 export default function Question({ word }) {
     let partOfSpeech = useRef("")
