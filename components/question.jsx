@@ -1,4 +1,3 @@
-import { faQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useRef } from "react"
 
@@ -45,25 +44,22 @@ export default function Question({ word }) {
             </div>
             <input
                 ref={cognate}
-                className="mt-20 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
+                className="mt-24 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
                 type="text"
                 placeholder="Cognate"
             />
             <input
                 ref={definition}
-                className="mt-20 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
+                className="mt-24 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
                 type="text"
                 placeholder="Definition"
             />
-            <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
+            {/* <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
                 <div className="animate-tilt absolute -inset-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
                 <button className="relative h-full w-full rounded bg-primary text-lg text-text ">
                     SUMBIT
                 </button>
-            </div>
-            <button className=" absolute bottom-0 right-0 m-1 flex h-12 w-12 items-center justify-center rounded-full border-4 border-primary bg-black/0 text-4xl text-primary">
-                <FontAwesomeIcon icon={faQuestion} />
-            </button>
+            </div> */}
         </div>
     )
 }
