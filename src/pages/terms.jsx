@@ -24,14 +24,15 @@ export async function getServerSideProps() {
 export default function terms({ sets }) {
     let [currentCard, setCurrentCard] = useState(sets[0])
     let [direction, setDirection] = useState("")
-    let [CurCardNum, setCurCardNum] = useState(1)
+    let [curCardNum, setCurCardNum] = useState(1)
     let [cardIndex, setCardIndex] = useState(0)
     let [progress, setProgress] = useState(0)
+    let [flipped, setFlipped] = useState(false)
 
     let clickHandler = (direction) => {
         //Won't take effect until the next render
         setDirection(direction)
-        setCurCardNum(CurCardNum < 2 ? CurCardNum + 1 : 1)
+        setCurCardNum(curCardNum < 2 ? curCardNum + 1 : 1)
 
         let newIndex = 0
         if (direction == "right") {
@@ -62,13 +63,14 @@ export default function terms({ sets }) {
             <div className="absolute mt-10 h-[70vh] w-[30vw] min-w-[400px] -rotate-6 rounded bg-secondary drop-shadow-2xl sm:hidden"></div>
             <Card
                 cardNum={2}
-                CurCardNum={CurCardNum}
+                curCardNum={curCardNum}
                 direction={direction}
                 card={currentCard}
+                flipped={flipped}
             />
             <Card
                 cardNum={1}
-                CurCardNum={CurCardNum}
+                curCardNum={curCardNum}
                 direction={direction}
                 card={currentCard}
             />
@@ -101,7 +103,9 @@ function ProgressBar({ progress }) {
     )
 }
 
-function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
+function Card({ cardNum, curCardNum, direction, card }) {
+    //It gets really glitchy if the card is flipped during the transition so when transitioning, need to flip instantly first
+    let [flipTransition, setFlipTransition] = useState(true)
     let [flipped, setFlipped] = useState(false)
     let [status, setStatus] = useState("")
     //Need custom state for word because it needs to only be updated when the card becomes active - when the card is flying away, it should not change
@@ -116,6 +120,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
 
     useEffect(() => {
         if (curCardNum == cardNum) {
+            setFlipTransition(true)
             setWord(card.word)
             if (direction == "right") {
                 setStatus("fromRight")
@@ -129,6 +134,8 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
                 }, 100)
             }
         } else {
+            setFlipTransition(false)
+            setFlipped(false)
             if (direction == "right") {
                 setStatus("after")
             } else if (direction == "left") {
@@ -146,7 +153,8 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
         >
             <div
                 data-flipped={flipped}
-                className="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] data-[flipped=true]:[transform:rotateY(180deg)]"
+                data-transition={flipTransition}
+                className="relative h-full w-full ease-[cubic-bezier(.05,.43,.25,.95)] [transform-style:preserve-3d] data-[transition=true]:duration-500 data-[flipped=true]:[transform:rotateY(180deg)]"
             >
                 <div
                     data-status={status}
@@ -189,18 +197,18 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
                         />
                     </div>
                     <div className="leading-[4rem]">
-                        <span className="ml-5 mt-5 text-8xl text-text underline">
+                        <span className="ml-1 mt-5 text-8xl text-text underline">
                             {card.word}
                         </span>
                         <br />
-                        <span className="ml-10 mt-5 text-3xl text-text">
+                        <span className="mt-5 ml-1 text-xl text-text">
                             is a {"   "}
                         </span>
                         <span className="mt-5 text-5xl text-text underline">
                             {card.POS}
                         </span>
                         <br />
-                        <span className="ml-10 mt-5 text-3xl text-text">
+                        <span className="mt-5 ml-1 text-xl text-text">
                             in the {"   "}
                         </span>
                         <span className="mt-5 text-5xl text-text underline	">
@@ -216,7 +224,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
                         <br />
                         {card.POS == "noun" && (
                             <>
-                                <span className="ml-10 mt-5 text-3xl text-text">
+                                <span className="mt-5 ml-1 text-xl text-text">
                                     that is {"   "}
                                 </span>
                                 <span className="mt-5 text-5xl text-text underline	">
@@ -229,7 +237,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
                                 <br />
                             </>
                         )}
-                        <span className="ml-10 mt-5 text-3xl text-text">
+                        <span className="mt-5 ml-1 text-xl text-text">
                             {card.POS == "noun" ? "and has" : "that has"}{" "}
                             {"   "}
                         </span>
@@ -237,7 +245,7 @@ function Card({ cardNum, CurCardNum: curCardNum, direction, card }) {
                             NO COGNATE
                         </span>
                         <br />
-                        <span className="ml-10 mt-5 text-3xl text-text">
+                        <span className="mt-5 ml-1 text-xl text-text">
                             and means {"   "}
                         </span>
                         <span className="mt-5 text-5xl text-text underline	">
