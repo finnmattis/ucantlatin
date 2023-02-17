@@ -47,7 +47,10 @@ export default function terms({ sets }) {
     }
 
     return (
-        <div className="flex h-[90vh] flex-col items-center bg-primary">
+        <div
+            className="
+        flex h-[90vh] flex-col items-center bg-primary"
+        >
             <Link href="terms/browse">
                 <button className="absolute left-0 top-[10vh] m-2 h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105 sm:hidden">
                     <FontAwesomeIcon icon={faCompass} />

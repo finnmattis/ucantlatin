@@ -5,7 +5,10 @@ config.autoAddCss = false
 
 import { Roboto } from "@next/font/google"
 import Head from "next/head"
+import { Toaster } from "react-hot-toast"
 import Header from "../../components/header"
+import { UserContext } from "../../lib/context"
+import { useUserData } from "../../lib/hooks"
 import "../styles/globals.css"
 
 const roboto = Roboto({
@@ -14,8 +17,10 @@ const roboto = Roboto({
 })
 
 export default function App({ Component, pageProps }) {
+    const userData = useUserData()
+
     return (
-        <div className={roboto.className}>
+        <UserContext.Provider value={userData}>
             <Head>
                 <title>U Cant Latin</title>
                 <meta name="description" content="The Best Site" />
@@ -27,6 +32,14 @@ export default function App({ Component, pageProps }) {
             </Head>
             <Header />
             <Component {...pageProps} />
-        </div>
+            <Toaster
+                toastOptions={{
+                    style: {
+                        backgroundColor: "#303854",
+                        color: "#F9F7FB",
+                    },
+                }}
+            />
+        </UserContext.Provider>
     )
 }

@@ -53,12 +53,12 @@ export default function Question({ word }) {
                 type="text"
                 placeholder="Definition"
             />
-            {/* <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
+            <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
                 <div className="animate-tilt absolute -inset-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
                 <button className="relative h-full w-full rounded bg-primary text-lg text-text ">
                     SUMBIT
                 </button>
-            </div> */}
+            </div>
         </div>
     )
 }

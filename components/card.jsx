@@ -53,7 +53,7 @@ export default function Card({ cardNum, curCardNum, direction, card, back }) {
         <div
             data-status={status}
             onClick={(e) => flip(e)}
-            className="bg group absolute mt-10 h-[70vh] w-[30vw] min-w-[400px] cursor-pointer rounded
+            className="absolute mt-10 h-[70vh] w-[30vw] min-w-[400px] cursor-pointer rounded
             drop-shadow-2xl [perspective:1000px] data-[status=active]:z-10"
         >
             <div

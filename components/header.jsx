@@ -1,14 +1,20 @@
 import { faDoorOpen, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
+import { toast } from "react-hot-toast"
+import { UserContext } from "../lib/context"
+import { auth } from "../lib/firebase"
 
 export default function Header() {
+    const { profilePicture } = useContext(UserContext)
+
     let [menuShown, setMenuShown] = useState(false)
     const profileRef = useRef()
 
     return (
-        <header className="sticky flex h-[10vh] w-full items-center justify-evenly border-b-[1px] border-gray-500 bg-primary">
+        <header className="z-30 sticky flex h-[10vh] w-full items-center justify-evenly border-b-[1px] border-gray-500 bg-primary">
             <Link
                 href="/terms"
                 className="group flex h-full flex-col overflow-hidden"
@@ -39,9 +45,19 @@ export default function Header() {
             <div
                 ref={profileRef}
                 onClick={() => setMenuShown(!menuShown)}
-                className="absolute right-0 mx-10 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-secondary text-4xl text-text"
+                className="absolute right-5 flex sm:h-12 sm:w-12 h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-secondary text-4xl sm:text-3xl text-text"
             >
-                <FontAwesomeIcon icon={faUser} />
+                {profilePicture ? (
+                    <Image
+                        className="rounded-full"
+                        src={profilePicture}
+                        fill
+                        sizes="4rem, 3rem"
+                        alt="profile"
+                    ></Image>
+                ) : (
+                    <FontAwesomeIcon icon={faUser} />
+                )}
             </div>
             <Menu
                 show={menuShown}
@@ -55,7 +71,14 @@ export default function Header() {
 }
 
 function Menu({ show, profileRef, onClickOutside }) {
+    const { user, username } = useContext(UserContext)
     const menuRef = useRef()
+
+    const signOut = async () => {
+        await auth.signOut()
+        toast.success("Signed out!")
+        onClickOutside()
+    }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -76,20 +99,37 @@ function Menu({ show, profileRef, onClickOutside }) {
         <div
             ref={menuRef}
             data-show={show}
-            className="absolute top-24 right-10 flex h-60 w-64 flex-col items-center rounded bg-secondary transition-all duration-150 data-[show=false]:top-28 data-[show=false]:opacity-0"
+            className="absolute top-24 right-5 flex h-60 w-64 flex-col items-center rounded bg-secondary drop-shadow-2xl transition-all duration-150 data-[show=false]:top-28 data-[show=false]:opacity-0"
         >
-            <p className="mt-5 text-3xl text-text">Guest</p>
-            <Link
-                href="/login"
-                className="group mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500"
-            >
-                <div className="mx-5 text-2xl text-gray-500 transition-all duration-300 group-hover:text-gray-400">
-                    <FontAwesomeIcon icon={faDoorOpen} />
-                </div>
-                <p className="duraiton-300 text-2xl text-text transition-all group-hover:text-highlight">
-                    Log In
-                </p>
-            </Link>
+            <p className="mt-5 text-3xl text-text">
+                {username ? username : "Guest"}
+            </p>
+            {user ? (
+                <button
+                    onClick={signOut}
+                    className="hover:bg-gray-500 duration-300 transition mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500"
+                >
+                    <div className="mx-5 text-2xl text-text">
+                        <FontAwesomeIcon icon={faDoorOpen} />
+                    </div>
+                    <p className="text-2xl text-text">
+                        Sign Out
+                    </p>
+                </button>
+            ) : (
+                <Link
+                    onClick={onClickOutside}
+                    href="/enter"
+                    className="hover:bg-gray-500 duration-300 transition mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500"
+                >
+                    <div className="mx-5 text-2xl text-text">
+                        <FontAwesomeIcon icon={faDoorOpen} />
+                    </div>
+                    <p className="text-2xl text-text">
+                        Sign In
+                    </p>
+                </Link>
+            )}
         </div>
     )
 }
