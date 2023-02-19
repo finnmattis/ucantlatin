@@ -1,19 +1,31 @@
-import { useRef } from "react"
+import { useEffect, useState } from "react"
+import Input from "./input"
 
-export default function Question({ word }) {
-    let partOfSpeech = useRef("")
-    let family = useRef("")
-    let gender = useRef("")
-    let cognate = useRef("")
-    let definition = useRef("")
+export default function Question({ card, setCardSet }) {
+    const [POS, setPOS] = useState()
+    const [family, setFamily] = useState()
+    const [gender, setGender] = useState()
+    const [cognate, setCognate] = useState()
+    const [def, setDef] = useState()
+    //want to reset inputs to default values when card changes
+    useEffect(() => {
+        setPOS(card && card.POS)
+        setFamily(card && card.family)
+        setGender(card && card.gender)
+        setCognate(card && card.cognate !== "N/A" ? card.cognate : "")
+        setDef(card && card.def !== "N/A" ? card.def : "")
+    }, [card])
 
     return (
         <div className="flex h-full w-full flex-col items-center">
-            <p className="mt-5 text-5xl text-text">{word}</p>
             <div className="mt-10 flex w-full justify-evenly">
                 <select
-                    ref={partOfSpeech}
-                    className=" aspect-[10/3] w-[30%]  cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
+                    onChange={(e) => {
+                        setCardSet("POS", e.target.value)
+                        setPOS(e.target.value)
+                    }}
+                    className=" aspect-[10/3] w-[30%] cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
+                    value={POS}
                 >
                     <option value="n">Noun</option>
                     <option value="v">Verb</option>
@@ -22,8 +34,12 @@ export default function Question({ word }) {
                     <option value="conj">Conjunction</option>
                 </select>
                 <select
-                    ref={family}
+                    onChange={(e) => {
+                        setCardSet("family", e.target.value)
+                        setFamily(e.target.value)
+                    }}
                     className="aspect-[10/3] w-[30%] cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
+                    value={family}
                 >
                     <option value="1">Family 1</option>
                     <option value="2">Family 2</option>
@@ -32,33 +48,35 @@ export default function Question({ word }) {
                     <option value="5">Family 5</option>
                 </select>
                 <select
-                    ref={gender}
+                    onChange={(e) => {
+                        setCardSet("gender", e.target.value)
+                        setGender(e.target.value)
+                    }}
                     className="aspect-[10/3] w-[30%] cursor-pointer appearance-none rounded bg-primary text-center text-text outline-highlight placeholder:text-center focus:outline"
+                    value={gender}
                 >
-                    <option value="">N/A</option>
+                    <option value="N/A">N/A</option>
                     <option value="m">Masculine</option>
                     <option value="f">Feminine</option>
                     <option value="n">Neuter</option>
                 </select>
             </div>
-            <input
-                ref={cognate}
-                className="mt-24 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
-                type="text"
-                placeholder="Cognate"
+            <Input
+                name="cognate"
+                value={cognate}
+                func={(e) => {
+                    setCardSet("cognate", e.target.value)
+                    setCognate(e.target.value)
+                }}
             />
-            <input
-                ref={definition}
-                className="mt-24 aspect-[10/1] w-[80%] rounded bg-primary text-text outline-highlight focus:outline"
-                type="text"
-                placeholder="Definition"
+            <Input
+                name="definition"
+                value={def}
+                func={(e) => {
+                    setCardSet("def", e.target.value)
+                    setDef(e.target.value)
+                }}
             />
-            <div className="group relative mt-20 aspect-[10/2] h-[10%] rounded">
-                <div className="animate-tilt absolute -inset-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                <button className="relative h-full w-full rounded bg-primary text-lg text-text ">
-                    SUMBIT
-                </button>
-            </div>
         </div>
     )
 }

@@ -14,7 +14,11 @@ export default function Header() {
     const profileRef = useRef()
 
     return (
-        <header className="z-30 sticky flex h-[10vh] w-full items-center justify-evenly border-b-[1px] border-gray-500 bg-primary">
+        <header
+            // Need menu to go on top of everything else if shown
+            data-shown={menuShown}
+            className="sticky flex h-[10vh] w-full items-center justify-evenly border-b-[1px] border-gray-500 bg-primary data-[shown=true]:z-30"
+        >
             <Link
                 href="/terms"
                 className="group flex h-full flex-col overflow-hidden"
@@ -45,7 +49,7 @@ export default function Header() {
             <div
                 ref={profileRef}
                 onClick={() => setMenuShown(!menuShown)}
-                className="absolute right-5 flex sm:h-12 sm:w-12 h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-secondary text-4xl sm:text-3xl text-text"
+                className="absolute right-5 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-secondary text-4xl text-text sm:h-12 sm:w-12 sm:text-3xl"
             >
                 {profilePicture ? (
                     <Image
@@ -107,27 +111,23 @@ function Menu({ show, profileRef, onClickOutside }) {
             {user ? (
                 <button
                     onClick={signOut}
-                    className="hover:bg-gray-500 duration-300 transition mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500"
+                    className="mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
                 >
                     <div className="mx-5 text-2xl text-text">
                         <FontAwesomeIcon icon={faDoorOpen} />
                     </div>
-                    <p className="text-2xl text-text">
-                        Sign Out
-                    </p>
+                    <p className="text-2xl text-text">Sign Out</p>
                 </button>
             ) : (
                 <Link
                     onClick={onClickOutside}
                     href="/enter"
-                    className="hover:bg-gray-500 duration-300 transition mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500"
+                    className="mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
                 >
                     <div className="mx-5 text-2xl text-text">
                         <FontAwesomeIcon icon={faDoorOpen} />
                     </div>
-                    <p className="text-2xl text-text">
-                        Sign In
-                    </p>
+                    <p className="text-2xl text-text">Sign In</p>
                 </Link>
             )}
         </div>

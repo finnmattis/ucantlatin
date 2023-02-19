@@ -1,14 +1,27 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import Input from "./input"
 import Question from "./question"
 
-export default function Card({ cardNum, curCardNum, direction, card, back }) {
+export default function Card({
+    cardNum,
+    curCardNum,
+    direction,
+    card,
+    type = "review",
+    setCardSet = () => {},
+    index = 0,
+}) {
     //It gets really glitchy if the card is flipped during the transition so when transitioning, need to flip instantly first
     let [flipTransition, setFlipTransition] = useState(true)
     let [flipped, setFlipped] = useState(false)
     let [status, setStatus] = useState("")
     //Need custom state for word because it needs to only be updated when the card becomes active - when the card is flying away, it should not change
     let [word, setWord] = useState("")
+    //same logic for index
+    let [indexState, setIndexState] = useState()
+    //word state that holds the value of the input
+    let [wordInput, setWordInput] = useState()
 
     //This is so that the second card does not begin as active when the page loads
     useEffect(() => {
@@ -20,7 +33,12 @@ export default function Card({ cardNum, curCardNum, direction, card, back }) {
     useEffect(() => {
         if (curCardNum == cardNum) {
             setFlipTransition(true)
-            setWord(card.word)
+            if (type == "review") {
+                setWord(card.word)
+            } else {
+                setWordInput(card && card.word)
+                setIndexState(index)
+            }
             if (direction == "right") {
                 setStatus("fromRight")
                 setTimeout(() => {
@@ -63,24 +81,40 @@ export default function Card({ cardNum, curCardNum, direction, card, back }) {
             >
                 <div
                     data-status={status}
+                    data-flipped={flipped}
                     className="absolute flex h-full w-full items-center justify-center 
-            rounded bg-secondary duration-700 ease-[cubic-bezier(.05,.43,.25,.95)] [backface-visibility:hidden] data-[status=inactive]:hidden data-[status=after]:translate-x-full
-            data-[status=before]:-translate-x-full data-[status=fromRight]:-translate-x-full data-[status=fromLeft]:translate-x-full data-[status=before]:-rotate-6
-            data-[status=fromLeft]:rotate-6 data-[status=after]:rotate-6 data-[status=fromRight]:-rotate-6
+            rounded bg-secondary duration-700 ease-[cubic-bezier(.05,.43,.25,.95)] [backface-visibility:hidden] data-[flipped=true]:pointer-events-none data-[status=inactive]:hidden
+            data-[status=after]:translate-x-full data-[status=before]:-translate-x-full data-[status=fromRight]:-translate-x-full data-[status=fromLeft]:translate-x-full
+            data-[status=before]:-rotate-6 data-[status=fromLeft]:rotate-6 data-[status=after]:rotate-6
+            data-[status=fromRight]:-rotate-6
             data-[status=after]:scale-0
-            data-[status=before]:scale-0
-            data-[status=fromRight]:scale-0 data-[status=fromLeft]:scale-0
+            data-[status=before]:scale-0 data-[status=fromRight]:scale-0
+            data-[status=fromLeft]:scale-0
             data-[status=fromRight]:transition-none
             data-[status=fromLeft]:transition-none"
                 >
-                    <div className="absolute top-0 left-0 z-20 m-2 h-40 w-40 [backface-visibility:hidden] [transform:rotate(180deg)]">
+                    <p className="text-primmary absolute top-0 right-0 m-5 text-5xl">
+                        {indexState}
+                    </p>
+                    <div className="absolute top-0 left-0 z-20 m-2 h-40 w-40 [transform:rotate(180deg)]">
                         <Image
                             src="/corner.svg"
                             fill="contain"
                             alt="corner flourish"
                         />
                     </div>
-                    <p className="mt-5 text-5xl text-text">{word}</p>
+                    {type == "create" ? (
+                        <Input
+                            value={wordInput}
+                            func={(e) => {
+                                setCardSet("word", e.target.value)
+                                setWordInput(e.target.value)
+                            }}
+                            name="word"
+                        />
+                    ) : (
+                        <p className="mt-5 text-5xl text-text">{word}</p>
+                    )}
                 </div>
                 <div
                     data-status={status}
@@ -94,15 +128,18 @@ export default function Card({ cardNum, curCardNum, direction, card, back }) {
             data-[status=fromRight]:transition-none
             data-[status=fromLeft]:transition-none"
                 >
-                    <div className="absolute bottom-0 right-0 z-20 m-2 h-40 w-40 [backface-visibility:hidden]">
+                    <div className="absolute bottom-0 right-0 z-20 m-2 h-40 w-40">
                         <Image
                             src="/corner.svg"
                             fill="contain"
                             alt="corner flourish"
                         />
                     </div>
-                    {/* <CardBack card={card} /> */}
-                    <Question />
+                    {type == "create" ? (
+                        <Question card={card} setCardSet={setCardSet} />
+                    ) : (
+                        <CardBack card={card} />
+                    )}
                 </div>
             </div>
         </div>
