@@ -10,7 +10,7 @@ import { auth } from "../lib/firebase"
 export default function Header() {
     const { profilePicture } = useContext(UserContext)
 
-    let [menuShown, setMenuShown] = useState(false)
+    const [menuShown, setMenuShown] = useState(false)
     const profileRef = useRef()
 
     return (

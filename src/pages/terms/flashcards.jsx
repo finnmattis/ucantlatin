@@ -23,11 +23,11 @@ export async function getServerSideProps() {
 }
 
 export default function terms({ sets }) {
-    let [currentCard, setCurrentCard] = useState(sets[0])
-    let [direction, setDirection] = useState("")
-    let [curCardNum, setCurCardNum] = useState(1)
-    let [cardIndex, setCardIndex] = useState(0)
-    let [progress, setProgress] = useState(0)
+    const [currentCard, setCurrentCard] = useState(sets[0])
+    const [direction, setDirection] = useState("")
+    const [curCardNum, setCurCardNum] = useState(1)
+    const [cardIndex, setCardIndex] = useState(0)
+    const [progress, setProgress] = useState(0)
 
     let clickHandler = (direction) => {
         //Won't take effect until the next render

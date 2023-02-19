@@ -13,15 +13,15 @@ export default function Card({
     index = 0,
 }) {
     //It gets really glitchy if the card is flipped during the transition so when transitioning, need to flip instantly first
-    let [flipTransition, setFlipTransition] = useState(true)
-    let [flipped, setFlipped] = useState(false)
-    let [status, setStatus] = useState("")
+    const [flipTransition, setFlipTransition] = useState(true)
+    const [flipped, setFlipped] = useState(false)
+    const [status, setStatus] = useState("")
     //Need custom state for word because it needs to only be updated when the card becomes active - when the card is flying away, it should not change
-    let [word, setWord] = useState("")
+    const [word, setWord] = useState("")
     //same logic for index
-    let [indexState, setIndexState] = useState()
+    const [indexState, setIndexState] = useState()
     //word state that holds the value of the input
-    let [wordInput, setWordInput] = useState()
+    const [wordInput, setWordInput] = useState()
 
     //This is so that the second card does not begin as active when the page loads
     useEffect(() => {

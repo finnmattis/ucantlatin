@@ -31,17 +31,17 @@ export async function getServerSideProps() {
 }
 
 export default function create({ set }) {
-    let [initialSet, setInitialSet] = useState()
+    const [initialSet, setInitialSet] = useState()
     useEffect(() => {
         //need to create a deep copy for every object in the array
         const setCopy = set.map((a) => ({ ...a }))
         setInitialSet(setCopy)
     }, [set])
 
-    let [currentCard, setCurrentCard] = useState(set[0])
-    let [direction, setDirection] = useState("")
-    let [curCardNum, setCurCardNum] = useState(1)
-    let [cardIndex, setCardIndex] = useState(0)
+    const [currentCard, setCurrentCard] = useState(set[0])
+    const [direction, setDirection] = useState("")
+    const [curCardNum, setCurCardNum] = useState(1)
+    const [cardIndex, setCardIndex] = useState(0)
 
     const clickHandler = (direction) => {
         //Won't take effect until the next render
