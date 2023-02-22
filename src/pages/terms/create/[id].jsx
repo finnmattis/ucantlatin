@@ -2,14 +2,12 @@ import {
     collection,
     collectionGroup,
     getDocs,
-    orderBy,
     query,
     where,
 } from "firebase/firestore"
-import Link from "next/link"
-import Page404 from "../../../../components/404"
-import CreatePage from "../../../../components/create_page"
-import { firestore } from "../../../../lib/firebase"
+import Page404 from "../../../components/404"
+import CreatePage from "../../../components/create_page"
+import { firestore } from "../../../lib/firebase"
 
 export async function getServerSideProps(context) {
     const { id } = context.params

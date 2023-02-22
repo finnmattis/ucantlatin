@@ -2,13 +2,13 @@ import {
     faArrowLeft,
     faArrowRight,
     faUpload,
-    faUser
+    faUser,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signInWithPopup
+    signInWithPopup,
 } from "firebase/auth"
 import { doc, getDoc, writeBatch } from "firebase/firestore"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
@@ -17,10 +17,10 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
-import CheckBox from "../../components/checkbox"
-import Input from "../../components/input"
-import { UserContext } from "../../lib/context"
-import { auth, firestore, googleAuth, storage } from "../../lib/firebase"
+import CheckBox from "../components/checkbox"
+import Input from "../components/input"
+import { UserContext } from "../lib/context"
+import { auth, firestore, googleAuth, storage } from "../lib/firebase"
 
 export default function login() {
     //check username because google auth will connect firebase auth but not register a user in firestore
@@ -122,8 +122,7 @@ function Page() {
         if (!flipped && frontPageNum == 0) {
             try {
                 await signInWithEmailAndPassword(auth, email, password)
-            }
-            catch (err) {
+            } catch (err) {
                 toast.error(firebaseErrorToString(err))
                 return
             }
@@ -183,22 +182,25 @@ function Page() {
                             }}
                         />
                     ) : (
-                        <UserNamePage usernameFunc={setUsername} completeFunc={setRightEnabled} />
+                        <UserNamePage
+                            usernameFunc={setUsername}
+                            completeFunc={setRightEnabled}
+                        />
                     )}
-                        <button
-                            disabled={!rightEnabled}
-                            onClick={handleRight}
-                            className="absolute right-0 bottom-0 m-3 h-20 w-20 rounded-full bg-highlight text-3xl text-primary transition hover:scale-105 disabled:opacity-25"
-                        >
-                            <FontAwesomeIcon icon={faArrowRight} />
-                        </button>
-                        <button
-                            disabled={backPageNum === 0}
-                            onClick={flipLeft}
-                            className="absolute left-0 bottom-0 m-3 h-20 w-20 rounded-full bg-highlight text-3xl text-primary transition hover:scale-105 disabled:opacity-25"
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft} />
-                        </button>
+                    <button
+                        disabled={!rightEnabled}
+                        onClick={handleRight}
+                        className="absolute right-0 bottom-0 m-3 h-20 w-20 rounded-full bg-highlight text-3xl text-primary transition hover:scale-105 disabled:opacity-25"
+                    >
+                        <FontAwesomeIcon icon={faArrowRight} />
+                    </button>
+                    <button
+                        disabled={backPageNum === 0}
+                        onClick={flipLeft}
+                        className="absolute left-0 bottom-0 m-3 h-20 w-20 rounded-full bg-highlight text-3xl text-primary transition hover:scale-105 disabled:opacity-25"
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </button>
                 </div>
                 <div
                     className="absolute flex h-full w-full flex-col items-center rounded

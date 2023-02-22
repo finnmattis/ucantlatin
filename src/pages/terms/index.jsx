@@ -11,7 +11,7 @@ export default function index() {
                     <p>Explore</p>
                 </div>
             </Link>
-            <Link href="/terms/create">
+            <Link href="/terms/create/new">
                 <div className="mx-10 flex h-[50vh] w-96 cursor-pointer flex-col items-center rounded bg-secondary text-8xl text-primary transition-all duration-300 hover:bg-gray-500">
                     <FontAwesomeIcon icon={faPen} className="mt-36" />
                     <p>Create</p>

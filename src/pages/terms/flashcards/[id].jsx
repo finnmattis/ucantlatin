@@ -14,10 +14,10 @@ import {
 } from "firebase/firestore"
 import Link from "next/link"
 import { useState } from "react"
-import Page404 from "../../../../components/404"
-import Card from "../../../../components/card"
-import ProgressBar from "../../../../components/progressbar"
-import { firestore } from "../../../../lib/firebase"
+import Page404 from "../../../components/404"
+import Card from "../../../components/card"
+import ProgressBar from "../../../components/progressbar"
+import { firestore } from "../../../lib/firebase"
 
 export async function getServerSideProps(context) {
     const { id } = context.params
