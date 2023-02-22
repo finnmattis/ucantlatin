@@ -115,7 +115,7 @@ function Page() {
 
         await batch.commit()
 
-        toast.success("Success!")
+        toast.success("Done!")
     }
 
     const handleRight = async () => {

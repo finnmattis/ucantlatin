@@ -1,3 +1,5 @@
+import { faDeleteLeft, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import Input from "./input"
@@ -10,6 +12,7 @@ export default function Card({
     card,
     type = "review",
     setCardSet = () => {},
+    onDelete = () => {},
     index = 0,
 }) {
     //It gets really glitchy if the card is flipped during the transition so when transitioning, need to flip instantly first
@@ -31,13 +34,15 @@ export default function Card({
     }, [])
 
     useEffect(() => {
+        //idea is to set style which teleports card to position it needs to be before animation
+        //then set status to active which will trigger animation
         if (curCardNum == cardNum) {
             setFlipTransition(true)
             if (type == "review") {
                 setWord(card.word)
             } else {
                 setWordInput(card && card.word)
-                setIndexState(index)
+                setIndexState(index + 1)
             }
             if (direction == "right") {
                 setStatus("fromRight")
@@ -62,7 +67,11 @@ export default function Card({
     }, [curCardNum])
 
     const flip = (e) => {
-        if (e.target.nodeName !== "SELECT" && e.target.nodeName !== "INPUT") {
+        if (
+            e.target.nodeName !== "SELECT" &&
+            e.target.nodeName !== "INPUT" &&
+            e.target.id !== "delete"
+        ) {
             setFlipped(!flipped)
         }
     }
@@ -96,8 +105,19 @@ export default function Card({
                     <p className="text-primmary absolute top-0 right-0 m-5 text-5xl">
                         {indexState}
                     </p>
+                    <button
+                        onClick={onDelete}
+                        id="delete"
+                        className="absolute bottom-0 right-0 m-5 h-20 w-20 rounded-full bg-primary text-3xl text-text"
+                    >
+                        <FontAwesomeIcon
+                            className="pointer-events-none"
+                            icon={faTrash}
+                        />
+                    </button>
                     <div className="absolute top-0 left-0 z-20 m-2 h-40 w-40 [transform:rotate(180deg)]">
                         <Image
+                            priority
                             src="/corner.svg"
                             fill="contain"
                             alt="corner flourish"
@@ -130,6 +150,7 @@ export default function Card({
                 >
                     <div className="absolute bottom-0 right-0 z-20 m-2 h-40 w-40">
                         <Image
+                            priority
                             src="/corner.svg"
                             fill="contain"
                             alt="corner flourish"
