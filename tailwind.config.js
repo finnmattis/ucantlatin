@@ -22,6 +22,9 @@ module.exports = {
                 highlight: "#AAB1F9",
                 text: "#F9F7FB",
             },
+            gridTemplateColumns: {
+                responsive: "repeat(auto-fit, minmax(20rem, 1fr))",
+            },
         },
     },
     plugins: [require("@tailwindcss/forms")],

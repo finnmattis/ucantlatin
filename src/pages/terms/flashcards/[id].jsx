@@ -75,19 +75,14 @@ export default function terms({ id, set, exists }) {
         setCardIndex(newIndex)
         setCurrentCard(set[newIndex])
     }
-    console.log(set)
 
-    if (!exists) {
-        return <Page404 name="Oops! This set doesn't exist!" />
-    } else if (set.length == 0) {
-        return <Page404 name="Oops! This set is empty!" />
-    } else {
+    if (exists) {
         return (
             <div
                 className="
             flex h-[90vh] flex-col items-center bg-primary"
             >
-                <Link href="/terms/browse">
+                <Link href="/terms/explore">
                     <button className="absolute left-0 top-[10vh] m-2 h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105 sm:hidden">
                         <FontAwesomeIcon icon={faCompass} />
                     </button>
@@ -128,5 +123,7 @@ export default function terms({ id, set, exists }) {
                 </div>
             </div>
         )
+    } else {
+        return <Page404 name="Oops! This set does not exist!" />
     }
 }

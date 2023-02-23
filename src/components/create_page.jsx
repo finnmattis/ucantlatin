@@ -21,6 +21,7 @@ import { toast } from "react-hot-toast"
 import { UserContext } from "../lib/context"
 import { firestore } from "../lib/firebase"
 import Card from "./card"
+import Input from "./input"
 
 export default function createPage({ id, set }) {
     const { user } = useContext(UserContext)
@@ -39,6 +40,8 @@ export default function createPage({ id, set }) {
     const [direction, setDirection] = useState("")
     const [curCardNum, setCurCardNum] = useState(1)
     const [cardIndex, setCardIndex] = useState(0)
+
+    const [name, setName] = useState("")
 
     const clickHandler = (direction) => {
         //Won't take effect until the next render
@@ -73,6 +76,13 @@ export default function createPage({ id, set }) {
     }
 
     const onComplete = async () => {
+        if (set.length === 0) {
+            toast.error("Set must have at least one card!")
+            return
+        } else if (!name) {
+            toast.error("Set must have a name!")
+            return
+        }
         const loadingToast = toast.loading("Saving...")
         //fetch collection from firestore if id and exists otherwise create new one
         let setRef = null
@@ -90,10 +100,13 @@ export default function createPage({ id, set }) {
             }
         } else {
             setRef = doc(collection(firestore, "users", user.uid, "sets"))
+            id = setRef.id
         }
 
         await setDoc(setRef, {
-            name: "set1",
+            name: name,
+            length: set.length,
+            author: user.uid,
             id: setRef.id,
         })
 
@@ -157,12 +170,19 @@ export default function createPage({ id, set }) {
 
     return (
         <div className="flex h-[90vh] flex-col items-center bg-primary">
-            <button
-                onClick={onComplete}
-                className="absolute right-0 top-[10vh] m-2 h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105 sm:hidden"
-            >
-                <FontAwesomeIcon icon={faCheck} />
-            </button>
+            <div className="absolute right-0 m-2 flex  h-52 w-96 flex-col items-center rounded bg-secondary">
+                <Input
+                    name="Name"
+                    value={name}
+                    func={(e) => setName(e.target.value)}
+                />
+                <button
+                    onClick={onComplete}
+                    className="h-20 w-20 rounded-full border-2 border-text text-3xl text-text transition hover:scale-105 sm:hidden"
+                >
+                    <FontAwesomeIcon icon={faCheck} />
+                </button>
+            </div>
             <div className="absolute mt-10 h-[70vh] w-[30vw] min-w-[400px] rotate-6 rounded bg-secondary drop-shadow-2xl sm:hidden"></div>
             <div className="absolute mt-10 h-[70vh] w-[30vw] min-w-[400px] -rotate-6 rounded bg-secondary drop-shadow-2xl sm:hidden"></div>
             <Card

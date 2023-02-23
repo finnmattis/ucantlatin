@@ -26,7 +26,7 @@ export default function Header() {
                 <div className="flex h-full flex-col justify-center">
                     <p className="text-lg text-text">Terms</p>
                 </div>
-                <div className="h-15 -my-2 hidden grow rounded-lg bg-highlight group-hover:block"></div>
+                <div className="grow rounded-lg bg-highlight duration-200 ease-[cubic-bezier(.05,.43,.25,.95)] group-hover:-my-2"></div>
             </Link>
             <Link
                 href="/"
@@ -35,7 +35,7 @@ export default function Header() {
                 <div className="flex h-full flex-col justify-center">
                     <p className="text-lg text-text">Home</p>
                 </div>
-                <div className="h-15 -my-2 hidden grow rounded-lg bg-highlight group-hover:block"></div>
+                <div className="grow rounded-lg bg-highlight duration-200 ease-[cubic-bezier(.05,.43,.25,.95)] group-hover:-my-2"></div>
             </Link>
             <Link
                 href="/dict"
@@ -44,7 +44,7 @@ export default function Header() {
                 <div className="flex h-full flex-col justify-center">
                     <p className="text-lg text-text">Dictionary</p>
                 </div>
-                <div className="h-15 -my-2 hidden grow rounded-lg bg-highlight group-hover:block"></div>
+                <div className="grow rounded-lg bg-highlight duration-200 ease-[cubic-bezier(.05,.43,.25,.95)] group-hover:-my-2"></div>
             </Link>
             <div
                 ref={profileRef}
