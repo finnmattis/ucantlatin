@@ -1,4 +1,4 @@
-import { faDoorOpen, faUser } from "@fortawesome/free-solid-svg-icons"
+import { faBook, faDoorOpen, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import Link from "next/link"
@@ -109,15 +109,26 @@ function Menu({ show, profileRef, onClickOutside }) {
                 {username ? username : "Guest"}
             </p>
             {user ? (
-                <button
-                    onClick={signOut}
-                    className="mt-5 flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
-                >
-                    <div className="mx-5 text-2xl text-text">
-                        <FontAwesomeIcon icon={faDoorOpen} />
-                    </div>
-                    <p className="text-2xl text-text">Sign Out</p>
-                </button>
+                <div className="w-full">
+                    <button
+                        onClick={signOut}
+                        className="mt-5 flex h-16 w-full items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
+                    >
+                        <div className="mx-5 text-2xl text-text">
+                            <FontAwesomeIcon icon={faDoorOpen} />
+                        </div>
+                        <p className="text-2xl text-text">Sign Out</p>
+                    </button>
+                    <Link
+                        href={`/terms/users/${username}`}
+                                 className="flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
+                    >
+                        <div className="mx-5 text-2xl text-text">
+                            <FontAwesomeIcon icon={faBook} />
+                        </div>
+                        <p className="text-2xl text-text">My Sets</p>
+                    </Link>
+                </div>
             ) : (
                 <Link
                     onClick={onClickOutside}

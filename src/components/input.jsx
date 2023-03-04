@@ -1,7 +1,7 @@
 export default function Input({
     name,
     func,
-    value = "",
+    value,
     type = "text",
     placeholder = "",
 }) {

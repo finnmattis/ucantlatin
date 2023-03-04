@@ -283,6 +283,7 @@ function SignPage({
                     setEmail(e.target.value)
                     checkComplete(e.target.value, password)
                 }}
+                value={email}
                 name="Email"
             />
             <Input
@@ -290,6 +291,7 @@ function SignPage({
                     setPassword(e.target.value)
                     checkComplete(email, e.target.value)
                 }}
+                value={password}
                 name="Password"
                 type={showPassword ? "text" : "password"}
             />
