@@ -103,7 +103,7 @@ function Menu({ show, profileRef, onClickOutside }) {
         <div
             ref={menuRef}
             data-show={show}
-            className="absolute top-24 right-5 flex h-60 w-64 flex-col items-center rounded bg-secondary drop-shadow-2xl transition-all duration-150 data-[show=false]:top-28 data-[show=false]:opacity-0"
+            className="absolute top-24 right-5 flex h-60 w-64 flex-col items-center rounded bg-secondary drop-shadow-2xl transition-all duration-150 data-[show=false]:pointer-events-none data-[show=false]:top-28 data-[show=false]:opacity-0"
         >
             <p className="mt-5 text-3xl text-text">
                 {username ? username : "Guest"}
@@ -121,7 +121,7 @@ function Menu({ show, profileRef, onClickOutside }) {
                     </button>
                     <Link
                         href={`/terms/users/${username}`}
-                                 className="flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
+                        className="flex h-16 w-full cursor-pointer items-center border-t-[1px] border-gray-500 transition duration-300 hover:bg-gray-500"
                     >
                         <div className="mx-5 text-2xl text-text">
                             <FontAwesomeIcon icon={faBook} />
