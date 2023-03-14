@@ -10,7 +10,7 @@ import {
 import Feed from "../../components/Feed"
 import { firestore } from "../../lib/firebase"
 
-const IN_LIMIT = 8
+const IN_LIMIT = 12
 
 export async function getServerSideProps() {
     const setsQuery = query(
@@ -41,7 +41,7 @@ export async function getServerSideProps() {
 
 export default function explore({ initialSets }) {
     return (
-        <div className="min-h-[90vh] bg-primary flex justify-center">
+        <div className="flex min-h-[90vh] justify-center bg-primary">
             <Feed initialSets={initialSets} />
         </div>
     )

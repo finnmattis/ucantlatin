@@ -1,6 +1,6 @@
 import {
-    collectionGroup,
     collection,
+    collectionGroup,
     doc,
     getDoc,
     getDocs,
@@ -23,7 +23,12 @@ export default function Feed({ initialSets, uid = null }) {
         const last = sets[sets.length - 1]
         let setQuery
         if (uid) {
-            setQuery = query(collection(firestore, "users", uid, "sets"), orderBy("name"), startAfter(last.name), limit(LOAD_LIMIT))
+            setQuery = query(
+                collection(firestore, "users", uid, "sets"),
+                orderBy("name"),
+                startAfter(last.name),
+                limit(LOAD_LIMIT)
+            )
         } else {
             setQuery = query(
                 collectionGroup(firestore, "sets"),
@@ -51,8 +56,7 @@ export default function Feed({ initialSets, uid = null }) {
         )
         if (setSnap.length === 0) {
             setEnd(true)
-        }
-        else {
+        } else {
             setEnd(false)
         }
         setSets([...sets, ...setSnap])
@@ -65,6 +69,7 @@ export default function Feed({ initialSets, uid = null }) {
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
+                console.log("LOADING MORE")
                 loadMore()
             }
         })
@@ -72,7 +77,7 @@ export default function Feed({ initialSets, uid = null }) {
     })
 
     return (
-        <div className="w-[90%] my-5 grid w-[80%] grid-cols-responsive gap-4 sm:flex sm:flex-col">
+        <div className="my-5 grid w-[80%] grid-cols-4 gap-4 sm:flex sm:flex-col">
             {sets.map((set, index) => {
                 return (
                     <div

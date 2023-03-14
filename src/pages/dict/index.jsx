@@ -109,7 +109,7 @@ export default function index() {
                 <pre className="top-12 left-16 my-20 w-[50%] overflow-hidden text-lg text-white">
                     {definition}
                 </pre>
-                <div className="absolute top-0 left-0 z-20 m-2 h-40 w-40 [transform:rotate(180deg)]">
+                <div className="absolute top-0 left-0 z-20 m-2 h-40 w-40 rotate-180">
                     <Image
                         priority
                         src="/corner.svg"
