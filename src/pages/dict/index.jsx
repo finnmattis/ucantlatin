@@ -67,7 +67,7 @@ export default function index() {
 
     return (
         <div className="flex min-h-[90vh] flex-col items-center bg-primary">
-            <p className="text-center text-6xl text-white sm:text-3xl">
+            <p className="mt-6 text-center text-6xl text-white sm:text-3xl">
                 Look up a word in{"   "}
                 <span className="relative inline-block text-purple-500">
                     <FontAwesomeIcon

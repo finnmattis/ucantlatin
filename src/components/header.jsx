@@ -29,11 +29,11 @@ export default function Header() {
                 <div className="grow rounded-lg bg-highlight duration-200 ease-[cubic-bezier(.05,.43,.25,.95)] group-hover:-my-2"></div>
             </Link>
             <Link
-                href="/"
+                href="/sentences"
                 className="group flex h-full flex-col overflow-hidden"
             >
                 <div className="flex h-full flex-col justify-center">
-                    <p className="text-lg text-text">Home</p>
+                    <p className="text-lg text-text">Sentences</p>
                 </div>
                 <div className="grow rounded-lg bg-highlight duration-200 ease-[cubic-bezier(.05,.43,.25,.95)] group-hover:-my-2"></div>
             </Link>
